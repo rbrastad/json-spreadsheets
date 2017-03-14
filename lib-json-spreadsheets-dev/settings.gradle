@@ -1,0 +1,5 @@
+rootProject.name = projectName
+
+
+include 'lib-json-spreadsheets'
+project(':lib-json-spreadsheets').projectDir = new File('../lib-json-spreadsheets')
