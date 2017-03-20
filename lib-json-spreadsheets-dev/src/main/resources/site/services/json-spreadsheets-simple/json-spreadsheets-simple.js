@@ -2,15 +2,16 @@ var jsonSpreadSheets = require("/lib/json-spreadsheets");
 var contentLib = require('/lib/xp/content');
 var encodingLib = require('/lib/text-encoding');
 var portalLib = require('/lib/xp/portal');
+
 /**
  *
- *  Create a simple excel sheet from JSON
+ *  Create a simple excel sheet firm aJSON header and data and with the default built in template
  *
  */
 
 function handleRequest( req ) {
-    var jsonSpreadsheetConfig = {
-        fileName : "json-spreadsheet-test.xls",
+    var config = {
+        reportFileName : "json-spreadsheet-simple.xls",
         header: [
             {
                 name: "name",
@@ -43,39 +44,14 @@ function handleRequest( req ) {
         ]
     };
 
-
-    // Create the report Get the result
-    var jsonSpreadSheetsResult = jsonSpreadSheets.getSpreadsheet( jsonSpreadsheetConfig );
-
-    // Decode the data string
-    var decodedStream = encodingLib.base64Decode(jsonSpreadSheetsResult.data);
-
-    // create a media content  somewhere
-    // http://repo.enonic.com/public/com/enonic/xp/docs/6.9.3/docs-6.9.3-libdoc.zip!/module-lib_xp_content.html#.createMedia
-    var attachment = contentLib.createMedia({
-        name: jsonSpreadsheetConfig.fileName,
-        parentPath: "/",
-        mimeType: 'text/plain',
-        data: decodedStream,
-        branch: 'draft'
-    });
-
-    // Create the url so we can download the the file
-    var attachmentUrl = portalLib.attachmentUrl({
-        path: attachment._path,
-        download: true,
-        type : "absolute"
-    });
-
-    // Do something with the response
-    delete jsonSpreadSheetsResult.data;
-    jsonSpreadSheetsResult.attachment = attachment;
-    jsonSpreadSheetsResult.attachment.downloadUrl = attachmentUrl;
+    // Create the report and get the result
+    var jsonSpreadSheetsResult = jsonSpreadSheets.getSpreadsheet( config );
 
     return {
-        status : 201,
-        body: jsonSpreadSheetsResult,
-        contentType: "application/json"
+        body: jsonSpreadSheets.getDataAsStream( jsonSpreadSheetsResult ),
+        headers : {
+            "Content-Disposition": 'attachment; filename="' + config.reportFileName + '"'
+        }
     };
 };
 

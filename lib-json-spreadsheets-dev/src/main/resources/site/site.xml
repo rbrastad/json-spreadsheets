@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-<display-name>Data Get</display-name>
-<info>Data Get from external resources</info>
+<display-name>JSON Spreadsheets</display-name>
+<info>JSON Spreadsheets TEST</info>
 <url>http://www.item.no/</url>
 <vendor>
   <name>Runar Brastad</name>
   <url>http://www.item.no</url>
 </vendor>
 <config></config>
+  <mappings>
+    <mapping controller="/services/json-spreadsheets-simple/json-spreadsheets-simple.js" order="10">
+      <pattern>/api/v1/spreadsheets/simple</pattern>
+    </mapping>
+    <mapping controller="/services/json-spreadsheets-template/json-spreadsheets-template.js" order="10">
+      <pattern>/api/v1/spreadsheets/template</pattern>
+    </mapping>
+
+  </mappings>
 
 
 </site>

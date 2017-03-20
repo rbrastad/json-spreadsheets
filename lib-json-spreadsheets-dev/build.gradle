@@ -40,6 +40,12 @@ dependencies {
     include "com.enonic.lib:util:1.1.1"
 
     include project(':lib-json-spreadsheets')
+
+    include "org.jxls:jxls-poi:1.0.9"
+    include "org.jxls:jxls:2.3.0"
+    include 'org.jxls:jxls-jexcel:1.0.6'
+    include 'stax:stax:1.2.0'
+
 }
 
 repositories {
