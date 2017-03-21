@@ -15,32 +15,45 @@ import java.io.IOException;
 public class JSONSpreadsheets {
 
 
-    public JsonNode getSpreadsheet(String jsonConfig) throws IOException{
+    public JsonNode getSpreadsheet(String jsonConfig) throws Exception{
         ObjectMapper mapper = new ObjectMapper();
         JsonNode config = mapper.readTree(jsonConfig);
 
-        ReportResult reportFile = getReport( config , null);
+        ReportResult reportFile = getReport( config , null, false);
 
         doWorkConfig( config, reportFile );
 
         return mapper.valueToTree( reportFile );
     }
 
-    public JsonNode  getSpreadsheet(String jsonConfig, ByteSource source) throws IOException{
+    public JsonNode  getSpreadsheetSimple(String jsonConfig, ByteSource source) throws Exception{
         ObjectMapper mapper = new ObjectMapper();
         JsonNode config = mapper.readTree(jsonConfig);
 
-        ReportResult reportFile = getReport( config , source);
+        ReportResult reportFile = getReport( config , source, true);
+
+        return mapper.valueToTree( reportFile );
+    }
+
+    public JsonNode  getSpreadsheet(String jsonConfig, ByteSource source) throws Exception{
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode config = mapper.readTree(jsonConfig);
+
+        ReportResult reportFile = getReport( config , source, false);
 
         return mapper.valueToTree( reportFile );
     }
 
 
-    private ReportResult getReport(JsonNode config, ByteSource source) throws IOException{
+    private ReportResult getReport(JsonNode config, ByteSource source, boolean simple) throws Exception{
         ByteArrayOutputStream bos = null;
-        if( source == null && !config.has("work")) {
+        if( simple ) {
             SpreadsheetSimpleExporter excelSimpleReportExporter = new SpreadsheetSimpleExporter();
-            bos = excelSimpleReportExporter.getAsSpreadsheet(config);
+            if(source != null){
+                bos = excelSimpleReportExporter.getAsSpreadsheet(config, source);
+            }else{
+                bos = excelSimpleReportExporter.getAsSpreadsheet(config);
+            }
         }else {
             SpreadsheetTemplateExporter exporter = new SpreadsheetTemplateExporter();
             if( config.has("work") && config.get("work").has("templatesDirectory")){

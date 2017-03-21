@@ -8,7 +8,6 @@ import org.jxls.util.JxlsHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Logger;
 
@@ -25,15 +24,19 @@ public class SpreadsheetTemplateExporter {
         mapper = new ObjectMapper();
     }
 
-    public ByteArrayOutputStream getAsSpreadsheet(JsonNode report, ByteSource source) throws IOException {
+    public ByteArrayOutputStream getAsSpreadsheet(JsonNode report, ByteSource source) throws Exception {
 
-        File templateFile = File.createTempFile( "jsonSpreadSheetsTemplateTMP-" + System.nanoTime() , ".xls" );
+        File templateFile = File.createTempFile( "jsonSpreadSheetsTemplateTMP-" + System.nanoTime() , ".xlsx" );
         Files.write( source.read(), templateFile);
 
         InputStream is = Files.asByteSource(templateFile).openStream();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-        JxlsHelper.getInstance().processTemplate(is, bos, JsonDataUtil.getJSonDataAsContext( report.get("data") ));
+        try {
+            JxlsHelper.getInstance().processTemplate(is, bos, JsonDataUtil.getJSonDataAsContext(report.get("data")));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         is.close();
         templateFile.delete();

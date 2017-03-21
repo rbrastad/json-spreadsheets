@@ -34,11 +34,12 @@ dependencies {
     include "com.enonic.xp:lib-content:${xpVersion}"
     include 'com.enonic.lib:text-encoding:1.1.0'
 
-    include "org.jxls:jxls-poi:1.0.9"
-    include "org.jxls:jxls:2.3.0"
+    include "org.jxls:jxls-poi:1.0.12"
+    include "org.jxls:jxls:2.4.0"
     include 'org.jxls:jxls-jexcel:1.0.6'
-    include 'stax:stax:1.2.0'
+    include 'org.jxls:jxls-reader:2.0.2'
 
+    include 'stax:stax:1.2.0'
 } 
 
 repositories {

@@ -4,7 +4,7 @@ var encodingLib = require('/lib/text-encoding');
 
 exports.getSpreadsheet = function( config ) {
     try {
-        if(config.hasOwnProperty("template")){
+        if(config.hasOwnProperty("template") && !config.template.hasOwnProperty("resourceSimple") ){
             if( config.template.hasOwnProperty("stream") ) {
                 return JSON.parse(jsonSpreadSheetsBean.getSpreadsheet(JSON.stringify(config), config.template.stream));
             }else if(config.template.hasOwnProperty("resource")){
@@ -18,7 +18,12 @@ exports.getSpreadsheet = function( config ) {
                 return JSON.parse(jsonSpreadSheetsBean.getSpreadsheet(JSON.stringify(config), null));
             }
         }else
-            return JSON.parse(jsonSpreadSheetsBean.getSpreadsheet(JSON.stringify(config)));
+            if(config.hasOwnProperty("template") && config.template.hasOwnProperty("resourceSimple") ) {
+                var stream = exports.getResourceStream( config.template.resourceSimple );
+                return JSON.parse(jsonSpreadSheetsBean.getSpreadsheetSimple(JSON.stringify(config) , stream ) );
+            }else{
+                return JSON.parse(jsonSpreadSheetsBean.getSpreadsheetSimple(JSON.stringify(config) , null  ));
+            }
     }catch (e){
         return e;
     }
