@@ -6,10 +6,7 @@ import com.google.common.io.ByteSource;
 import com.google.common.io.Files;
 import org.jxls.template.SimpleExporter;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -38,6 +35,7 @@ public class SpreadsheetSimpleExporter {
         try{
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             SimpleExporter exporter = new SimpleExporter();
+
             if(source != null){
                 File templateFile = File.createTempFile( "jsonSpreadSheetsTemplateTMP-" + System.nanoTime() , ".xlsx" );
                 Files.write( source.read(), templateFile);
